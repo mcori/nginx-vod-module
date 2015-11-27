@@ -534,7 +534,6 @@ m3u8_builder_build_master_playlist(
 	for (cur_sequence = media_set->sequences; cur_sequence < media_set->sequences_end; cur_sequence++)
 	{
 		cur_sequence_tracks = cur_sequence->filtered_clips[0].longest_track;
-
 		track = (cur_sequence_tracks[MEDIA_TYPE_VIDEO] != NULL ?
 			cur_sequence_tracks[MEDIA_TYPE_VIDEO] :
 			cur_sequence_tracks[MEDIA_TYPE_AUDIO]);
@@ -563,15 +562,13 @@ m3u8_builder_build_master_playlist(
 			"m3u8_builder_build_master_playlist: vod_alloc failed (2)");
 		return VOD_ALLOC_FAILED;
 	}
-
 	// write the header
 	p = vod_copy(result->data, m3u8_header, sizeof(m3u8_header) - 1);
-
 	// write the streams
 	for (cur_sequence = media_set->sequences; cur_sequence < media_set->sequences_end; cur_sequence++)
 	{
 		cur_sequence_tracks = cur_sequence->filtered_clips[0].longest_track;
-
+		
 		// write the track information
 		if (cur_sequence_tracks[MEDIA_TYPE_VIDEO] != NULL)
 		{
@@ -619,13 +616,11 @@ m3u8_builder_build_master_playlist(
 			}
 			*p++ = '/';
 		}
-
 		p = vod_copy(p, conf->index_file_name_prefix.data, conf->index_file_name_prefix.len);
 		if (media_set->has_multi_sequences && sequence_index != INVALID_SEQUENCE_INDEX)
 		{
 			p = vod_sprintf(p, "-f%uD", cur_sequence->index + 1);
 		}
-
 		if (cur_sequence_tracks[MEDIA_TYPE_VIDEO] != NULL)
 		{
 			p = vod_sprintf(p, "-v%uD", cur_sequence_tracks[MEDIA_TYPE_VIDEO]->index + 1);
@@ -635,12 +630,9 @@ m3u8_builder_build_master_playlist(
 		{
 			p = vod_sprintf(p, "-a%uD", cur_sequence_tracks[MEDIA_TYPE_AUDIO]->index + 1);
 		}
-
 		p = vod_copy(p, m3u8_url_suffix, sizeof(m3u8_url_suffix) - 1);
 	}
-
 	result->len = p - result->data;
-
 	if (result->len > result_size)
 	{
 		vod_log_error(VOD_LOG_ERR, request_context->log, 0,
@@ -648,7 +640,6 @@ m3u8_builder_build_master_playlist(
 			result->len, result_size);
 		return VOD_UNEXPECTED;
 	}
-	
 	return VOD_OK;
 }
 
